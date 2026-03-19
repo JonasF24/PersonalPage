@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jonas Flynn — Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --blue: #3B82F6; --blue-bright: #60A5FA; --blue-glow: rgba(59,130,246,0.35); --blue-glow-soft: rgba(59,130,246,0.12); --t: 0.35s cubic-bezier(0.4,0,0.2,1); }
+    [data-theme="dark"] { --bg: #080B10; --bg2: #0D1117; --bg3: #111826; --border: rgba(59,130,246,0.18); --text: #E8EDF5; --muted: #6B7A8D; --soft: #98A8BC; --card: rgba(13,17,23,0.85); --nav: rgba(8,11,16,0.88); }
+    [data-theme="light"] { --bg: #F0F4FF; --bg2: #E4EAFC; --bg3: #D8E3FB; --border: rgba(59,130,246,0.22); --text: #0D1117; --muted: #536380; --soft: #2C3E57; --card: rgba(220,230,252,0.7); --nav: rgba(240,244,255,0.9); }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 400; overflow-x: hidden; transition: background var(--t), color var(--t); }
+
+    .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 650px; height: 650px; background: radial-gradient(circle, rgba(59,130,246,0.13) 0%, transparent 70%); top: -220px; right: -80px; }
+    .orb-2 { width: 450px; height: 450px; background: radial-gradient(circle, rgba(59,130,246,0.09) 0%, transparent 70%); bottom: 5%; left: -120px; }
+    [data-theme="light"] .orb { opacity: 0.6; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 150; background: var(--nav); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.9rem 3rem; display: flex; align-items: center; justify-content: space-between; transition: background var(--t), border-color var(--t); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; display: flex; align-items: center; gap: 0.45rem; }
+    .logo-pip { width: 7px; height: 7px; border-radius: 50%; background: var(--blue-bright); box-shadow: 0 0 10px var(--blue-bright); }
+    .nav-r { display: flex; align-items: center; gap: 1rem; }
+    .toggle { width: 44px; height: 24px; background: var(--bg3); border: 1px solid var(--border); border-radius: 100px; cursor: pointer; position: relative; transition: background 0.3s; flex-shrink: 0; }
+    .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--blue-bright); box-shadow: 0 0 8px var(--blue-glow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    [data-theme="light"] .toggle::after { transform: translateX(20px); }
+    .nav-back { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-bright); text-decoration: none; border: 1px solid var(--blue); padding: 0.42rem 1rem; border-radius: 3px; transition: background 0.2s, box-shadow 0.2s; }
+    .nav-back:hover { background: var(--blue-glow-soft); box-shadow: 0 0 18px var(--blue-glow); }
+
+    /* PAGE HEADER */
+    .page-header { position: relative; z-index: 1; padding: 4rem 3rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .page-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-bright); margin-bottom: 1rem; }
+    .page-tag::before { content: ''; width: 24px; height: 1px; background: var(--blue-bright); }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.8rem; }
+    .page-header h1 span { color: var(--blue-bright); }
+    .page-sub { font-size: 0.9rem; color: var(--muted); }
+
+    /* MAIN */
+    .main { position: relative; z-index: 1; padding: 3rem; display: flex; flex-direction: column; gap: 3rem; }
+
+    .sec-head { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.8rem; }
+    .sec-head-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue-bright); white-space: nowrap; }
+    .sec-head-rule { flex: 1; height: 1px; background: var(--border); }
+
+    /* PROJECT CARD */
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover { border-color: var(--blue); box-shadow: 0 0 40px var(--blue-glow-soft); }
+
+    .project-hero {
+      background: linear-gradient(135deg, #0a0f1e 0%, #0d1829 50%, #091220 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(59,130,246,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .project-hero-inner { position: relative; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .project-title-block { flex: 1; min-width: 280px; }
+    .project-eyebrow { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+    .project-num { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-bright); }
+    .tag { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.22rem 0.6rem; border-radius: 100px; }
+    .tag-html { background: rgba(228,77,38,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+    .tag-js { background: rgba(234,179,8,0.12); color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+    .tag-api { background: rgba(59,130,246,0.12); color: var(--blue-bright); border: 1px solid rgba(59,130,246,0.3); }
+    .tag-live { background: rgba(16,185,129,0.12); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .project-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.8rem; }
+    .project-name span { color: var(--blue-bright); }
+    .project-tagline { font-size: 1rem; color: var(--soft); line-height: 1.6; max-width: 520px; }
+
+    .project-links { display: flex; flex-direction: column; gap: 0.8rem; align-items: flex-end; }
+    .link-btn { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; padding: 0.7rem 1.4rem; border-radius: 3px; transition: background 0.2s, box-shadow 0.2s; white-space: nowrap; }
+    .link-btn-primary { background: var(--blue); color: #fff; border: 1px solid var(--blue); }
+    .link-btn-primary:hover { background: var(--blue-bright); box-shadow: 0 0 20px var(--blue-glow); }
+    .link-btn-ghost { color: var(--blue-bright); border: 1px solid var(--border); background: transparent; }
+    .link-btn-ghost:hover { background: var(--blue-glow-soft); border-color: var(--blue); }
+
+    /* PROJECT BODY */
+    .project-body { padding: 3rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; }
+
+    .project-overview h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.8rem; }
+    .project-overview p { font-size: 0.88rem; line-height: 1.8; color: var(--soft); margin-bottom: 1rem; }
+
+    .feature-list { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 1.5rem; }
+    .feature-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.85rem; color: var(--soft); line-height: 1.5; }
+    .feature-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-bright); box-shadow: 0 0 6px var(--blue-bright); flex-shrink: 0; margin-top: 0.45rem; }
+
+    /* SCREENS */
+    .screens-col h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 1.2rem; }
+    .screen-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 1.2rem 1.4rem; margin-bottom: 0.8rem; transition: border-color 0.2s; }
+    .screen-card:hover { border-color: var(--blue); }
+    .screen-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--blue-bright); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .screen-name::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--blue-bright); box-shadow: 0 0 6px var(--blue-bright); flex-shrink: 0; }
+    .screen-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* TECH STRIP */
+    .tech-strip { padding: 1.5rem 3rem; border-top: 1px solid var(--border); background: var(--bg2); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .tech-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-right: 0.5rem; }
+    .tech-pill { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.08em; padding: 0.3rem 0.9rem; border: 1px solid var(--border); color: var(--soft); border-radius: 100px; }
+
+    /* MORE PROJECTS PLACEHOLDER */
+    .more-card {
+      background: var(--card); border: 1px dashed var(--border); border-radius: 4px;
+      padding: 3rem; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .more-icon { font-size: 2rem; opacity: 0.4; }
+    .more-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--muted); }
+    .more-sub { font-size: 0.82rem; color: var(--muted); max-width: 360px; line-height: 1.6; }
+    .more-link { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-bright); text-decoration: none; border: 1px solid var(--border); padding: 0.5rem 1.2rem; border-radius: 3px; transition: background 0.2s, border-color 0.2s; margin-top: 0.5rem; }
+    .more-link:hover { background: var(--blue-glow-soft); border-color: var(--blue); }
+
+    /* FOOTER */
+    footer { position: relative; z-index: 1; padding: 1.5rem 3rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+    .r { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .r.in { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0.9rem 1.5rem; }
+      .page-header { padding: 3rem 1.5rem 2rem; }
+      .main { padding: 1.5rem; }
+      .project-hero { padding: 2rem 1.5rem; }
+      .project-links { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+      .project-body { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.5rem; }
+      .tech-strip { padding: 1.2rem 1.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <nav>
+    <a href="index.html" class="logo"><span class="logo-pip"></span>Jonas Flynn</a>
+    <div class="nav-r">
+      <div class="toggle" id="tog"></div>
+      <a href="index.html" class="nav-back">← Back to Site</a>
+    </div>
+  </nav>
+
+  <div class="page-header r">
+    <div class="page-tag">Vibe Coded</div>
+    <h1>GitHub <span>Projects</span></h1>
+    <p class="page-sub">Tools and apps built with AI-assisted development · <a href="https://github.com/JonasF24" target="_blank" style="color:var(--blue-bright);text-decoration:none;">github.com/JonasF24 ↗</a></p>
+  </div>
+
+  <div class="main">
+
+    <div class="r">
+      <div class="sec-head">
+        <span class="sec-head-label">Featured Project</span>
+        <div class="sec-head-rule"></div>
+      </div>
+
+      <div class="project-card r">
+
+        <!-- HERO -->
+        <div class="project-hero">
+          <div class="project-hero-inner">
+            <div class="project-title-block">
+              <div class="project-eyebrow">
+                <span class="project-num">01</span>
+                <span class="tag tag-html">HTML</span>
+                <span class="tag tag-js">JavaScript</span>
+                <span class="tag tag-api">Finnhub API</span>
+                <span class="tag tag-live">Live Data</span>
+              </div>
+              <div class="project-name">Stock <span>Screenr</span></div>
+              <p class="project-tagline">A live, browser-based stock research dashboard for identifying high-quality investment opportunities across three distinct strategies — powered by real-time Finnhub data.</p>
+            </div>
+            <div class="project-links">
+              <a href="https://jonasf24.github.io/Stock-Screenr" target="_blank" class="link-btn link-btn-primary">
+                ↗ Launch App
+              </a>
+              <a href="https://github.com/JonasF24/Stock-Screenr" target="_blank" class="link-btn link-btn-ghost">
+                ⌨ View on GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="project-body">
+
+          <div class="project-overview">
+            <h3>Overview</h3>
+            <p>Stock Screenr is a single HTML file that runs entirely in your browser. It pulls live quotes, fundamentals, and news headlines directly from Finnhub and applies three independent stock screens to surface the best opportunities within each strategy.</p>
+            <p>All screening criteria are verified against the most recent earnings reports — not estimates. Built with plain HTML, CSS, and vanilla JavaScript with no frameworks or build step required.</p>
+
+            <div class="feature-list">
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>Live quotes</strong> via Finnhub REST API with WebSocket real-time tick updates</span></div>
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>Earnings-verified screening</strong> — criteria checked against actual reported figures</span></div>
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>Insights panel</strong> — per-stock investment thesis and risk factors on every passing name</span></div>
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>Post-Market News Feed</strong> — auto-fetches headlines for any selected stock after 4:00 PM ET</span></div>
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>ETF price strip</strong> — live quotes for SCHD, SPY, VOO, and VTI as market benchmarks</span></div>
+              <div class="feature-item"><span class="feature-dot"></span><span><strong>Dual clocks</strong> — local time and US Eastern Time displayed simultaneously</span></div>
+            </div>
+          </div>
+
+          <div class="screens-col">
+            <h3>The Three Screens</h3>
+            <div class="screen-card">
+              <div class="screen-name">Low Risk Value</div>
+              <div class="screen-desc">Targets businesses with consistent, above-average growth trading at a low price relative to expected growth (PEG &lt; 1). Screens for 5Y revenue growth &gt;50%, ROE &gt;15%, D/E &lt;1, and positive free cash flow.</div>
+            </div>
+            <div class="screen-card">
+              <div class="screen-name">Buffett Stocks</div>
+              <div class="screen-desc">Classic value-compounder criteria. Targets profitable businesses with strong ROE (&gt;20%), conservative balance sheets (D/E 0–0.5), positive dividends, and P/E under 25 — inspired by fundamental quality investing.</div>
+            </div>
+            <div class="screen-card">
+              <div class="screen-name">Dividend Growth</div>
+              <div class="screen-desc">Top-500 US companies with dividend yield &gt;1.5%, 5+ consecutive years of increases, ROE &gt;15%, D/E &lt;1, and payout ratio &lt;70%. Stocks ranked by dividend yield, highest to lowest.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TECH STRIP -->
+        <div class="tech-strip">
+          <span class="tech-label">Stack</span>
+          <span class="tech-pill">Vanilla HTML</span>
+          <span class="tech-pill">CSS</span>
+          <span class="tech-pill">JavaScript</span>
+          <span class="tech-pill">Finnhub API</span>
+          <span class="tech-pill">WebSocket</span>
+          <span class="tech-pill">localStorage</span>
+          <span class="tech-pill">No frameworks</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MORE PROJECTS PLACEHOLDER -->
+    <div class="r">
+      <div class="sec-head">
+        <span class="sec-head-label">More Projects</span>
+        <div class="sec-head-rule"></div>
+      </div>
+      <div class="more-card">
+        <div class="more-icon">⚡</div>
+        <div class="more-title">More coming soon</div>
+        <div class="more-sub">Additional projects will appear here as they're built and shipped. Follow along on GitHub to see what's in progress.</div>
+        <a href="https://github.com/JonasF24" target="_blank" class="more-link">View GitHub Profile ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 Jonas Flynn</p>
+    <p><a href="index.html" style="color:var(--blue-bright);text-decoration:none;">← Back to site</a></p>
+  </footer>
+
+  <script>
+    const tog = document.getElementById('tog');
+    const html = document.documentElement;
+    html.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+    tog.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.r').forEach(el => obs.observe(el));
+  </script>
+</body>
+</html>
